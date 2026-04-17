@@ -40,6 +40,8 @@
             gap: 10px;
             width: 260px;
             flex-shrink: 0;
+            max-height: 72vh;
+            overflow-y: auto;
         }
 
         button {
@@ -71,6 +73,7 @@
             background: #fff;
             flex: 1;
             min-width: 0;
+            min-height: 72vh;
         }
 
         .viewer-header {
@@ -115,16 +118,44 @@
         }
 
         @media (max-width: 900px) {
+            body {
+                padding: 16px 12px;
+            }
+
+            h1 {
+                margin-bottom: 16px;
+                font-size: 24px;
+            }
+
             .content-layout {
                 flex-direction: column;
             }
 
             .buttons-container {
                 width: 100%;
+                max-height: none;
+                overflow-y: visible;
             }
 
             button {
                 text-align: center;
+                padding: 10px 12px;
+                font-size: 15px;
+            }
+
+            .viewer {
+                min-height: 56vh;
+            }
+
+            .viewer-header {
+                gap: 10px;
+                flex-wrap: wrap;
+                align-items: flex-start;
+            }
+
+            .code-area {
+                max-height: 52vh;
+                font-size: 13px;
             }
         }
     </style>
@@ -163,11 +194,29 @@
         const currentFile = document.getElementById("currentFile");
         const copyBtn = document.getElementById("copyBtn");
         const hint = document.getElementById("hint");
+        const fileButtons = Array.from(document.querySelectorAll("#buttonsContainer button[data-file]"));
+        const codeCache = new Map();
 
         let currentCode = "";
 
         function sanitizeCode(rawText) {
             return rawText.replace(/<!-- Code injected by live-server -->[\s\S]*?<\/script>\s*/g, "");
+        }
+
+        async function preloadAllCodes() {
+            const preloadTasks = fileButtons.map(async (btn) => {
+                const filename = btn.getAttribute("data-file");
+                try {
+                    const response = await fetch(filename);
+                    if (!response.ok) throw new Error("fetch failed");
+                    const text = await response.text();
+                    codeCache.set(filename, sanitizeCode(text));
+                } catch (error) {
+                    codeCache.set(filename, "Unable to load code for " + filename);
+                }
+            });
+
+            await Promise.all(preloadTasks);
         }
         
 
@@ -184,24 +233,24 @@
 
             currentFile.textContent = filename;
 
-            try {
-                const response = await fetch(filename);
-                if (!response.ok) {
-                    throw new Error("Could not read file");
+            if (!codeCache.has(filename)) {
+                hint.style.display = "none";
+                codeArea.textContent = "Loading...";
+                codeArea.classList.add("show");
+                try {
+                    const response = await fetch(filename);
+                    if (!response.ok) throw new Error("Could not read file");
+                    const text = await response.text();
+                    codeCache.set(filename, sanitizeCode(text));
+                } catch (error) {
+                    codeCache.set(filename, "Unable to load code for " + filename);
                 }
-                const text = await response.text();
-                const cleanText = sanitizeCode(text);
-                currentCode = text;
-                currentCode = cleanText;
-                codeArea.textContent = cleanText;
-                hint.style.display = "none";
-                codeArea.classList.add("show");
-            } catch (error) {
-                currentCode = "";
-                codeArea.textContent = "Unable to load code for " + filename;
-                hint.style.display = "none";
-                codeArea.classList.add("show");
             }
+
+            currentCode = codeCache.get(filename) || "";
+            codeArea.textContent = currentCode;
+            hint.style.display = "none";
+            codeArea.classList.add("show");
         });
 
         copyBtn.addEventListener("click", async () => {
@@ -220,6 +269,8 @@
                 }, 1200);
             }
         });
+
+        preloadAllCodes();
     </script>
 </body>
 </html>
