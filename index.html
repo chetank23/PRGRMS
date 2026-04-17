@@ -22,6 +22,12 @@
             margin: 0 auto;
         }
 
+        .content-layout {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
         h1 {
             text-align: center;
             margin-bottom: 40px;
@@ -30,10 +36,10 @@
 
         .buttons-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 24px;
+            flex-direction: column;
+            gap: 10px;
+            width: 260px;
+            flex-shrink: 0;
         }
 
         button {
@@ -45,6 +51,7 @@
             border-radius: 4px;
             transition: all 0.2s;
             font-weight: 500;
+            text-align: left;
         }
 
         button:hover {
@@ -62,6 +69,8 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             background: #fff;
+            flex: 1;
+            min-width: 0;
         }
 
         .viewer-header {
@@ -104,32 +113,47 @@
             text-align: center;
             padding: 18px 0;
         }
+
+        @media (max-width: 900px) {
+            .content-layout {
+                flex-direction: column;
+            }
+
+            .buttons-container {
+                width: 100%;
+            }
+
+            button {
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>My Programs</h1>
-
-        <div class="buttons-container" id="buttonsContainer">
-            <button data-file="1 FormsValid.html">1 FormsValid.html</button>
-            <button data-file="2 TextGrow.html">2 TextGrow.html</button>
-            <button data-file="3 countrycap.html">3 countrycap.html</button>
-            <button data-file="4 textanal.html">4 textanal.html</button>
-            <button data-file="5a-dFact.html">5a-dFact.html</button>
-            <button data-file="6 internalexternal.html">6 internalexternal.html</button>
-            <button data-file="7astackbox.html">7astackbox.html</button>
-            <button data-file="7b.stackclean.html">7b.stackclean.html</button>
-            <button data-file="8imageslider.html">8imageslider.html</button>
-            <button data-file="9 Textmani.html">9 Textmani.html</button>
-        </div>
-
-        <div class="viewer">
-            <div class="viewer-header">
-                <h2 id="currentFile">Select a button to view code</h2>
-                <button class="copy-btn" id="copyBtn" type="button">Copy Code</button>
+        <div class="content-layout">
+            <div class="buttons-container" id="buttonsContainer">
+                <button data-file="1 FormsValid.html">1 FormsValid.html</button>
+                <button data-file="2 TextGrow.html">2 TextGrow.html</button>
+                <button data-file="3 countrycap.html">3 countrycap.html</button>
+                <button data-file="4 textanal.html">4 textanal.html</button>
+                <button data-file="5a-dFact.html">5a-dFact.html</button>
+                <button data-file="6 internalexternal.html">6 internalexternal.html</button>
+                <button data-file="7astackbox.html">7astackbox.html</button>
+                <button data-file="7b.stackclean.html">7b.stackclean.html</button>
+                <button data-file="8imageslider.html">8imageslider.html</button>
+                <button data-file="9 Textmani.html">9 Textmani.html</button>
             </div>
-            <div class="hint" id="hint">Only code text is shown. Output is not executed.</div>
-            <pre class="code-area" id="codeArea"></pre>
+
+            <div class="viewer">
+                <div class="viewer-header">
+                    <h2 id="currentFile">Select a button to view code</h2>
+                    <button class="copy-btn" id="copyBtn" type="button">Copy Code</button>
+                </div>
+                <div class="hint" id="hint">Only code text is shown. Output is not executed.</div>
+                <pre class="code-area" id="codeArea"></pre>
+            </div>
         </div>
     </div>
 
@@ -145,6 +169,7 @@
         function sanitizeCode(rawText) {
             return rawText.replace(/<!-- Code injected by live-server -->[\s\S]*?<\/script>\s*/g, "");
         }
+        
 
         buttonsContainer.addEventListener("click", async (event) => {
             const btn = event.target.closest("button[data-file]");
