@@ -33,6 +33,7 @@
             flex-wrap: wrap;
             gap: 15px;
             justify-content: center;
+            margin-bottom: 40px;
         }
 
         button {
@@ -50,6 +51,66 @@
             background: #f0f0f0;
             border-color: #999;
         }
+
+        button.active {
+            background: #333;
+            color: white;
+            border-color: #333;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .code-header h2 {
+            color: #333;
+            font-size: 20px;
+        }
+
+        .copy-btn {
+            padding: 10px 20px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #555;
+        }
+
+        .copy-btn.copied {
+            background: #4CAF50;
+        }
+
+        .code-display {
+            background: #f5f5f5;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 <body>
@@ -57,17 +118,711 @@
         <h1>My Programs</h1>
         
         <div class="buttons-container">
-            <button onclick="window.open('1 FormsValid.html')">1 FormsValid</button>
-            <button onclick="window.open('2 TextGrow.html')">2 TextGrow</button>
-            <button onclick="window.open('3 countrycap.html')">3 countrycap</button>
-            <button onclick="window.open('4 textanal.html')">4 textanal</button>
-            <button onclick="window.open('5a-dFact.html')">5a-dFact</button>
-            <button onclick="window.open('6 internalexternal.html')">6 internalexternal</button>
-            <button onclick="window.open('7astackbox.html')">7astackbox</button>
-            <button onclick="window.open('7b.stackclean.html')">7b.stackclean</button>
-            <button onclick="window.open('8imageslider.html')">8imageslider</button>
-            <button onclick="window.open('9 Textmani.html')">9 Textmani</button>
+            <button onclick="showCode('1 FormsValid', programsCode['1 FormsValid'], this)">1 FormsValid</button>
+            <button onclick="showCode('2 TextGrow', programsCode['2 TextGrow'], this)">2 TextGrow</button>
+            <button onclick="showCode('3 countrycap', programsCode['3 countrycap'], this)">3 countrycap</button>
+            <button onclick="showCode('4 textanal', programsCode['4 textanal'], this)">4 textanal</button>
+            <button onclick="showCode('5a-dFact', programsCode['5a-dFact'], this)">5a-dFact</button>
+            <button onclick="showCode('6 internalexternal', programsCode['6 internalexternal'], this)">6 internalexternal</button>
+            <button onclick="showCode('7astackbox', programsCode['7astackbox'], this)">7astackbox</button>
+            <button onclick="showCode('7b.stackclean', programsCode['7b.stackclean'], this)">7b.stackclean</button>
+            <button onclick="showCode('8imageslider', programsCode['8imageslider'], this)">8imageslider</button>
+            <button onclick="showCode('9 Textmani', programsCode['9 Textmani'], this)">9 Textmani</button>
+        </div>
+
+        <div class="code-header">
+            <h2 id="codeTitle">Select a program to view code</h2>
+            <button class="copy-btn" id="copyBtn" onclick="copyCode()">📋 Copy Code</button>
+        </div>
+        <div class="code-display">
+            <pre id="codeContent">Click on any button to view the code</pre>
         </div>
     </div>
+
+    <script>
+        const programsCode = {
+            '1 FormsValid': `1) FORMS VALIDATION
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Registration Form</title>
+    <script src="1_validation_extjs_updated.js" defer></script>
+</head>
+
+<body>
+
+    <h2>Registration Form</h2>
+
+    <form id="registrationForm">
+
+        First Name:
+        <input type="text" id="firstName" minlength="6" required>
+        <br><br>
+
+        Last Name:
+        <input type="text" id="lastName" required>
+        <br><br>
+
+        Password:
+        <input type="password" id="password" minlength="6" required>
+        <br><br>
+
+        E-mail:
+        <input type="email" id="email" required>
+        <br><br>
+
+        Mobile Number:
+        <input type="tel" id="mobile" required>
+        <br><br>
+
+        Address:
+        <textarea id="address" required></textarea>
+        <br><br>
+
+        <button type="submit">Register</button>
+
+    </form>
+
+</body>
+
+</html>
+
+---
+
+validation.js
+
+document.getElementById("registrationForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const firstName = document.getElementById("firstName").value.trim();
+    if (!/^[a-zA-Z]{6,}$/.test(firstName)) {
+        alert("Minimum 6 characters required for First Name and only alphabets allowed");
+        return;
+    }
+
+    const email = document.getElementById("email").value.trim();
+    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+        alert("Enter a valid email");
+        return;
+    }
+
+    const mobile = document.getElementById("mobile").value.trim();
+    if (!/^\\d{10}$/.test(mobile)) {
+        alert("Mobile number must be exactly 10 digits");
+        return;
+    }
+
+    alert("Registration successful!");
+    document.getElementById("registrationForm").submit();
+});`,
+
+            '2 TextGrow': `2) TEXT GROW SHRINK
+
+<html>
+   <head>
+        <title>Text Growing and Shrinking</title>
+   </head>
+<body>
+    <center>
+       <p id="demo">TEXT</p>
+   </center>
+   <script>
+	var size = 5; 
+	var growing = true; 
+	var ids = document.getElementById("demo");
+              
+        function animateText() {
+	     if (growing) {
+		size += 5;    
+                ids.innerHTML = "TEXT GROWING";
+                ids.setAttribute("style", "font-size:" + size + "px; color:red");
+                if (size >= 50) {
+                     growing = false;
+                    }
+             } 
+            else {
+                size -= 5;     
+                ids.innerHTML = "TEXT SHRINKING";
+                ids.setAttribute("style", "font-size:" + size + "px; color:blue");
+
+                if (size <= 5) {
+                      growing = true;
+                          }
+             }
+         }
+      var intervalId = setInterval(animateText, 100);
+</script>
+</body>
+</html>`,
+
+            '3 countrycap': `3) Country Capital
+
+<html>
+<head>
+    <title>Country Capital Selector</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        label {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        select {
+            font-size: 16px;
+            padding: 5px;
+        }
+
+        .capital {
+            font-size: 20px;
+            font-weight: bold;
+            color: blue;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Country and Capital Selector</h1>
+      <label>Select a country:</label>
+
+    <select id="country" onchange="showCapital()">
+        <option value="">--Select--</option>
+        <option value="Ottawa">Canada</option>
+        <option value="New Delhi">India</option>
+        <option value="Tokyo">Japan</option>
+        <option value="London">United Kingdom</option>
+        <option value="Washington, D.C.">United States</option>
+    </select>
+
+    <span id="capital" class="capital"></span>
+
+    <script>
+        function showCapital() {
+            const countrySelect = document.getElementById("country");
+            const capitalDisplay = document.getElementById("capital");
+            const selectedCapital = countrySelect.value;
+
+            capitalDisplay.innerHTML = selectedCapital
+                ? \`<h1>Capital: \${selectedCapital}</h1>\`
+                : "";
+        }
+    </script>
+
+</body>
+</html>`,
+
+            '4 textanal': `4) TEXT ANALYSIS
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text Analysis</title>
+    <script>
+        function countText(event) {
+            event.preventDefault();
+
+            const text = document.getElementById("textInput").value;
+            const len = text.length;
+            const charCount = text.replace(/\\s+/g, "").length;
+            const wordCount = text.trim() ? text.trim().split(/\\s+/).length : 0;
+            const lineCount = text ? text.split(/\\n/).length : 0;
+
+            alert(\`Length: \${len}
+                   \\nCharacters: \${charCount}
+                   \\nWords: \${wordCount}
+                   \\nLines: \${lineCount}\`);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Text Analysis Tool</h1>
+    <form id="textForm" onsubmit="countText(event)">
+        <label for="textInput">Enter your text below:</label><br><br>
+        <textarea id="textInput" rows="10" cols="50" placeholder="Type or paste your text here..."></textarea>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>`,
+
+            '5a-dFact': `5a Factorial....table
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display Date</title>
+    <script>
+        function displayDate() {
+            const currentDate = new Date().toLocaleString();
+            document.getElementById("dateTextbox").value = currentDate;
+        }
+    </script>
+</head>
+
+<body>
+
+    <h2>Display Current Date</h2>
+
+    <button onclick="displayDate()">Display Date</button>
+
+    <br><br>
+
+    <input type="text" id="dateTextbox" readonly>
+
+</body>
+</html>
+
+---
+
+5b)
+
+<html>
+<head>
+    <title>Factorial Program</title>
+    <script>
+        function factorial(num) {
+            if (num < 0) {
+                return "Factorial not defined for negative numbers.";
+            }
+            var result = 1;
+            for (var i = 1; i <= num; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        var n = parseInt(prompt("Enter a number to find its factorial:"));
+        var factorialResult = factorial(n);
+        alert("The factorial of " + n + " is: " + factorialResult);
+    </script>
+</head>
+<body>
+</body>
+</html>
+
+---
+
+5c)
+
+<html>
+ <head><title> Multiplication Table </title></head>
+ <body>
+ <script type="text/javascript">
+ var n=prompt("Enter positive value for n: "," ");
+if(!isNaN(n))
+{
+    var table="";
+    var number="";
+    for(i=1;i<=10;i++) {
+          number = n * i;
+           table += n + " * " + i + " = " + number + "\\n";
+      }
+    alert(table);
+}
+else {
+      alert("Enter positive value");
+       n=prompt("Enter positive value for n: "," ");
+}
+document.write(n+" table values displayed using alert ..<br />");
+
+</script>
+ </body>
+</html>
+
+---
+
+5d)
+
+<html>
+ <head><title>sum of n numbers using popup boxes</title>
+ <script type="text/javascript">
+function addsum()
+ {
+ 	alert("Enter the numbers to be added");
+	 var keepgoing = true;
+ 	var sumofnums = 0;
+ 	while (keepgoing) {
+      	sumofnums = sumofnums + (parseInt(prompt("what's the next number to add?",""))) ;
+
+        	keepgoing = confirm("add another number?") ;
+ 	}
+	alert("the sum of all your numbers is " + sumofnums) ;
+ }
+</script> </head>
+<body>  <form name=frm>
+ <input type="button" value='sum of n numbers' onclick="addsum();">
+ </form> </body> </html>`,
+
+            '6 internalexternal': `6) EXTERNAL
+
+<html>
+<head>
+    <title>CSS Style Demonstration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightblue;
+        }
+
+        h1 {
+            color: darkblue;
+        }
+
+        .internal-style {
+            color: green;
+            font-size: 20px;
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="6_style.css">
+</head>
+
+<body>
+
+    <h1>Demonstration of CSS Styles</h1>
+
+    <p style="color: red; font-size: 18px;">
+        This is a paragraph with inline CSS styling.
+    </p>
+
+    <p class="internal-style">
+        This paragraph uses internal CSS.
+    </p>
+
+    <p class="external-style">
+        This paragraph uses external CSS.
+    </p>
+</body>
+</html>
+
+---
+
+CSS FILE (6_style.css):
+
+.external-style {
+    color: purple;
+    font-size: 22px;
+    font-weight: bold;
+}`,
+
+            '7astackbox': `7a)STACKED COLOR NONTEXT
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Interactive Paragraphs</title>
+    <style>
+        .para {
+            position: absolute;
+            width: 300px;
+            height: 50px;
+            overflow: hidden;
+            padding: 10px;
+            border: 2px solid #000;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        #para1 {
+            top: 100px;
+            left: 200px;
+            background-color: lightblue;
+            z-index: 1;
+        }
+        #para2 {
+            top: 140px;
+            left: 220px;
+            background-color: lightgreen;
+            z-index: 2;
+        }
+        #para3 {
+            top: 180px;
+            left: 240px;
+            background-color: lightcoral;
+            z-index: 3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="para" id="para1" onmouseover="bringToFront('para1')">
+        This is the first paragraph. It is partially hidden.
+    </div>
+
+    <div class="para" id="para2" onmouseover="bringToFront('para2')">
+        This is the second paragraph, slightly hidden under the first one.
+    </div>
+
+    <div class="para" id="para3" onmouseover="bringToFront('para3')">
+        This is the third paragraph, hidden behind the other two.
+    </div>
+
+    <script>
+        var topLayer = "";
+
+        function bringToFront(paraId) {
+            if (topLayer && topLayer !== paraId) {
+                document.getElementById(topLayer).style.zIndex = "";
+            }
+
+            document.getElementById(paraId).style.zIndex = "10";
+            topLayer = paraId;
+        }
+    </script>
+
+</body>
+</html>`,
+
+            '7b.stackclean': `7b)COLORED STACKED RETURNS
+
+<html lang="en">
+<head>
+    <title>Interactive Paragraphs</title>
+    <style>
+        .para {
+            position: absolute;
+            width: 300px;
+            height: 50px;
+            overflow: hidden;
+            padding: 10px;
+            border: 2px solid #000;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        #para1 {
+            top: 100px;
+            left: 200px;
+            background-color: lightblue;
+            z-index: 1;
+        }
+
+        #para2 {
+            top: 140px;
+            left: 220px;
+            background-color: lightgreen;
+            z-index: 2;
+        }
+
+        #para3 {
+            top: 180px;
+            left: 240px;
+            background-color: lightcoral;
+            z-index: 3;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="para" id="para1"
+     onmouseover="bringToFront('para1')"
+     onmouseout="bringToBack('para1')">
+    This is the first paragraph.
+</div>
+
+<div class="para" id="para2"
+     onmouseover="bringToFront('para2')"
+     onmouseout="bringToBack('para2')">
+    This is the second paragraph.
+</div>
+
+<div class="para" id="para3"
+     onmouseover="bringToFront('para3')"
+     onmouseout="bringToBack('para3')">
+    This is the third paragraph.
+</div>
+
+<script>
+    var originalZ = {
+        para1: 1,
+        para2: 2,
+        para3: 3
+    };
+
+    function bringToFront(id) {
+        document.getElementById(id).style.zIndex = 10;
+    }
+
+    function bringToBack(id) {
+        document.getElementById(id).style.zIndex = originalZ[id];
+    }
+</script>
+
+</body>
+</html>`,
+
+            '8imageslider': `8)IMAGE SLIDER
+
+<html>
+<head>
+    <title>Image Slider</title>
+    <style>
+        #slider {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            overflow: hidden;
+        }
+        #slider img {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+        #slider img.active {
+            display: block;
+        }
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        #prev {
+            left: 10px;
+        }
+        #next {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="slider">
+        <img src="Img1.jpg" alt="Image 1" class="active" />
+        <img src="Img2.jpg" alt="Image 2" />
+        <img src="Img3.jpg" alt="Image 3" />
+        <button id="prev" class="nav-button">Prev</button>
+        <button id="next" class="nav-button">Next</button>
+    </div>
+    <div>
+        <button onclick="showImage(0)">Image 1</button>
+        <button onclick="showImage(1)">Image 2</button>
+        <button onclick="showImage(2)">Image 3</button>
+    </div>
+    <script>
+        var currentIndex = 0;
+        var images = document.querySelectorAll('#slider img');
+        var totalImages = images.length;
+
+        function showImage(index) {
+            images[currentIndex].classList.remove('active');
+            currentIndex = index;
+            images[currentIndex].classList.add('active');
+        }
+
+        document.getElementById('prev').onclick = function() {
+            showImage((currentIndex - 1 + totalImages) % totalImages);
+        };
+
+        document.getElementById('next').onclick = function() {
+            showImage((currentIndex + 1) % totalImages);
+        };
+
+        function autoSlide() {
+            showImage((currentIndex + 1) % totalImages);
+        }
+
+        setInterval(autoSlide, 3000);
+    </script>
+</body>
+</html>`,
+
+            '9 Textmani': `9) Add Replace Delete
+
+<html >
+<head>
+    <title>Content Manipulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #content {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            min-height: 100px;
+            white-space: pre-line;
+        }
+        button {
+            margin-right: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        function addContent() {
+            const contentDiv = document.getElementById("content");
+            const newContent = document.getElementById("inputText").value;
+            if (newContent.trim() === "") {
+                alert("Please enter some content.");
+                return;
+            }
+            contentDiv.innerText += newContent + "\\n";
+            document.getElementById("inputText").value = "";
+        }
+
+        function replaceContent() {
+            const contentDiv = document.getElementById("content");
+            const newContent = document.getElementById("inputText").value;
+            if (newContent.trim() === "") {
+                alert("Please enter some content.");
+                return;
+            }
+            contentDiv.innerText = newContent;
+            document.getElementById("inputText").value = "";
+        }
+
+        function deleteContent() {
+            document.getElementById("content").innerText = "";
+        }
+    </script>
+</head>
+<body>
+    <h1>Content Manipulation</h1>
+    <div id="content"></div>
+    <input type="text" id="inputText" placeholder="Enter your content here" />
+    <button onclick="addContent()">Add Content</button>
+    <button onclick="replaceContent()">Replace Content</button>
+    <button onclick="deleteContent()">Delete Content</button>
+</body>
+</html>`
+        };
+
+        function showCode(name, code, btn) {
+            // Update active button
+            document.querySelectorAll('.buttons-container button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Update code display
+            document.getElementById('codeTitle').textContent = name;
+            document.getElementById('codeContent').textContent = code;
+        }
+
+        function copyCode() {
+            const codeText = document.getElementById('codeContent').textContent;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy Code';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy code');
+            });
+        }
+    </script>
 </body>
 </html>
