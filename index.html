@@ -87,6 +87,28 @@
             margin-bottom: 15px;
             font-size: 18px;
             color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            padding: 8px 16px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #555;
+        }
+
+        .copy-btn.copied {
+            background: #4CAF50;
         }
     </style>
 </head>
@@ -97,7 +119,10 @@
         <div class="buttons-container" id="buttonsContainer"></div>
         
         <div class="code-display" id="codeDisplay">
-            <div class="program-name" id="programName"></div>
+            <div class="program-name" id="programName">
+                <span id="programTitle"></span>
+                <button class="copy-btn" id="copyBtn" onclick="copyCode()">📋 Copy Code</button>
+            </div>
             <pre><code id="codeContent"></code></pre>
         </div>
     </div>
@@ -778,8 +803,9 @@ CSS FILE (6_style.css):
 
         const container = document.getElementById('buttonsContainer');
         const codeDisplay = document.getElementById('codeDisplay');
-        const programName = document.getElementById('programName');
+        const programTitle = document.getElementById('programTitle');
         const codeContent = document.getElementById('codeContent');
+        const copyBtn = document.getElementById('copyBtn');
 
         programs.forEach(prog => {
             const btn = document.createElement('button');
@@ -794,9 +820,38 @@ CSS FILE (6_style.css):
             // Add active class to clicked button
             btn.classList.add('active');
 
-            programName.textContent = prog.name;
+            programTitle.textContent = prog.name;
             codeContent.textContent = programsCode[prog.key];
             codeDisplay.classList.add('active');
+        }
+
+        function copyCode() {
+            const codeText = document.getElementById('codeContent').textContent;
+            navigator.clipboard.writeText(codeText).then(() => {
+                copyBtn.textContent = '✓ Copied!';
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 Copy Code';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy code');
+            });
+        }
+
+        function copyCode() {
+            const codeText = document.getElementById('codeContent').textContent;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.textContent = '✓ Copied!';
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy Code';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                alert('Failed to copy code');
+            });
         }
     </script>
 </body>
