@@ -200,7 +200,15 @@
         let currentCode = "";
 
         function sanitizeCode(rawText) {
-            return rawText.replace(/<!-- Code injected by live-server -->[\s\S]*?<\/script>\s*/g, "");
+            return rawText
+                // Remove any <script> tag that mentions vercel (toolbar, feedback, live)
+                .replace(/<script\b[^>]*vercel[^>]*>[\s\S]*?<\/script>\s*/gi, "")
+                // Remove self-closing / src-only vercel script tags
+                .replace(/<script\b[^>]*src=["'][^"']*vercel\.live[^"']*["'][^>]*>\s*<\/script>\s*/gi, "")
+                // Remove live-server injected comment blocks
+                .replace(/<!-- Code injected by live-server -->[\s\S]*?<\/script>\s*/g, "")
+                // Trim trailing whitespace
+                .trimEnd();
         }
 
         async function preloadAllCodes() {
@@ -257,17 +265,20 @@
             if (!currentCode) return;
             try {
                 await navigator.clipboard.writeText(currentCode);
-                const oldText = copyBtn.textContent;
-                copyBtn.textContent = "Copied";
-                setTimeout(() => {
-                    copyBtn.textContent = oldText;
-                }, 1200);
-            } catch (error) {
-                copyBtn.textContent = "Copy Failed";
-                setTimeout(() => {
-                    copyBtn.textContent = "Copy Code";
-                }, 1200);
+                copyBtn.textContent = "Copied!";
+            } catch {
+                // Fallback for browsers that block clipboard API
+                const ta = document.createElement("textarea");
+                ta.value = currentCode;
+                ta.style.position = "fixed";
+                ta.style.opacity = "0";
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand("copy");
+                document.body.removeChild(ta);
+                copyBtn.textContent = "Copied!";
             }
+            setTimeout(() => { copyBtn.textContent = "Copy Code"; }, 1500);
         });
 
         preloadAllCodes();
